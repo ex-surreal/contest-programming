@@ -10,9 +10,6 @@ using namespace std;
 #define repe(i, a) for (__typeof((a).begin()) i = (a).begin(); i != (a).end(); i++)
 
 int main () {
-	// std::ios_base::sync_with_stdio(false);
-	string n;
-	cin >> n;
-	cout << n << endl;
+	std::ios_base::sync_with_stdio(false);
 	return 0;
 }
