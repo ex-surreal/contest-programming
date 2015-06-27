@@ -17,7 +17,6 @@ int main () {
 	rep (i, n) {
 		cin >> x[i] >> y[i];
 	}
-	
 	long long ans = 0;
 	rep (i, n) {
 		map <pair <int, int>, int> cnt;
