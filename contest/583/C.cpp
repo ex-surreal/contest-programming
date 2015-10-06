@@ -41,31 +41,24 @@ int main () {
 	std::ios_base::sync_with_stdio(false);
 	int n;
 	cin >> n;
-	set <int> S;
-	map <int, int> cnt, a;
+	map <int, int> c;
 	rep(i, n*n) {
 		int x;
 		cin >> x;
-		S.insert(x);
-		cnt[x]++;
+		c[-x]++;
 	}
-	vector <int> v, ans;
-	for (int x: S) {
-		v.pb(x);
-	}
-	reverse(v.begin(), v.end());
-	rep(i, sz(v)) {
-		rep(j, i) {
-			a[__gcd(v[i], v[j])] += cnt[v[j]];
+	vector <int> ans;
+	for (pair <const int, int> &p: c) {
+		while (p.y > 0) {
+			ans.pb(-p.x);
+			rep(i, sz(ans)) {
+				c[-__gcd(-p.x, ans[i])] -= 2;
+			}
 		}
-		int x = sqrt(a[v[i]]*a[v[i]] + cnt[v[i]]) - a[v[i]];
-		rep(k, x) {
-			ans.pb(v[i]);
-		}
-		cnt[v[i]] = x;
 	}
 	for (int e: ans) {
 		cout << e << " ";
 	}
+	cout << endl;
 	return 0;
 }

@@ -1,0 +1,11 @@
+<li class="expandable">
+					<span class="normal-label">Help</span>
+					<span class="flaticon-help"></span>
+					<span class="mobile label">Help</span>
+					<div class="desktop dropdown faq animated">
+						<span id="faq-navbar"></span>
+						<div class="center">
+							<strong><a href="">Visit Help Center</a></strong>
+						</div>
+					</div>
+				</li>
