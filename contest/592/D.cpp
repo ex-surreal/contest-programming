@@ -6,7 +6,6 @@ using namespace std;
 #define mp make_pair
 #define sz(x) int((x).size())
 
-int sum[200000];
 int cnt[200000];
 int cst[200000];
 int mx[200000];
@@ -14,52 +13,65 @@ int att[200000];
 vector <vector <int> > adj;
 
 int diff(int u) {
+	if (u == -1) {
+		return 0;
+	}
 	return 2*cnt[u] - cst[u];
 }
 
-void dfs1(int v, int u) {
-	cnt[v] = 0;
-	mx[v] = v;
-	for (int i = 0; i < sz(adj[v]); i ++) {
-		int x = adj[v][i];
-		if (x != u) {
-			dfs1(x, v);
-			if (cnt[x] > 0 || att[x]) {
-				cnt[v] += cnt[x] + 1;
-				if (diff(mx[v]) <= cnt[x]+1) {
-					mx[v] = x;
+void dfs1(int u, int w) {
+	for (int i = 0; i < sz(adj[u]); i ++) {
+		int v = adj[u][i];
+		if (v != w) {
+			dfs1(v, u);
+			if (cnt[v] > 0 || att[v] == 1) {
+				cnt[u] += cnt[v]+1;
+				if (diff(mx[u]) <= diff(v)) {
+					mx[u] = v;
 				}
 			}
 		}
 	}
-	cst[v] = cnt[v]*2 - cnt[mx[v]];
+	cst[u] = 2*cnt[u] - diff(mx[u]);
 }
 
 int cost = INT_MAX, start = 200000;
 
-void dfs2(int v, int u) {
-	int t = sum[u] - cnt[v];
-	int s = t;
-	for (int i = 0; i < sz(adj[v]); i ++) {
-		int x = adj[v][i];
-		if (x != u) {
-			if (cnt[x] > 0 || att[x]) {
-				s += cnt[x]+1;
+void dfs2(int u, int w) {
+	// cout << u+1 <<": " << cst[u] << " " << cnt[u] << endl;
+	if (cst[u] < cost) {
+		cost = cst[u];
+		start = u;
+	} else if (cst[u] == cost && u < start) {
+		start = u;
+	}
+	for (int i = 0; i < sz(adj[u]); i ++) {
+		int v = adj[u][i];
+		if (v != w) {
+			int cntu = cnt[u] - cnt[v] - int(att[v] == 1 || cnt[v] > 0);
+			int cstu = 0;
+			if (mx[u] != v) {
+				cstu = cst[u] - (cnt[v] + int(att[v] == 1 || cnt[v] > 0))*2;
+			} else {
+				int mx2 = -1;
+				for (int j = 0; j < sz(adj[u]); j ++) {
+					int x = adj[u][j];
+					if (x != v && x != w && diff(mx2) <= diff(x)) {
+						mx2 = x;
+					}
+				}
+				cstu = cst[u] - cst[v] - int(att[v] == 1 || cnt[v] > 0) - diff(mx2);
 			}
-		}
-	}
-	sum[v] = s;
-	int c = 0;
-	if (c < cost) {
-		cost = c;
-		start = v;
-	} else if (c == cost && start > v) {
-		start = v;
-	}
-	for (int i = 0; i < sz(adj[v]); i ++) {
-		int x = adj[v][i];
-		if (x != u) {
-			dfs2(x, v);
+			cout << u << ", " << v << " = " << cstu << " " << cntu << endl;
+			cnt[v] = cnt[v] + cntu + int(cntu > 0 || att[u] == 1);
+			int diff2 = 2*cntu - cstu + int(cnt[u] > 0 || att[u] == 1);
+			if (diff(mx[v]) <= diff2) {
+				mx[v] = u;
+				cst[v] = cnt[v]*2 - diff2;
+			} else {
+				cst[v] = cnt[v]*2 - diff(mx[v]);
+			}
+			dfs2(v, u);
 		}
 	}
 }
@@ -75,17 +87,23 @@ int main () {
 		adj[u-1].pb(v-1);
 		adj[v-1].pb(u-1);
 	}
+	int u;
 	for (int i = 0; i < m; i ++) {
-		int u;
 		cin >> u;
 		att[u - 1] = 1;
 	}
+	if (m == 1) {
+		cout << u << "\n";
+		cout << 0 << "\n";
+		return 0;
+	}
+	memset(mx, -1, sizeof(mx));
 	dfs1(0, 0);
-	sum[0] = cnt[0];
+	// for (int u = 0; u < n; u ++) {
+	// 	cout << u+1 << ": " << mx[u] + 1 << " " << diff(mx[u]) << " " << cst[u] << " " << cnt[u] << endl;
+	// }
 	dfs2(0, 0);
-	for (int i = 0; i < n; i ++) {
-		cout << cnt[i] << " ";
-	} cout << endl;
+	// cout << endl;
 	cout << start+1 << "\n" << cost << "\n";
 	return 0;
 }
