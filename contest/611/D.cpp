@@ -1,86 +1,61 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
-int maxMatch[5005][5005];
-
-void makeMaxMatch(string &s) {
-    for (int i = s.size(); i > 0; i --) {
-        for (int j = s.size(); j > i; j --) {
-            if (s[i-1] == s[j-1]) {
-                maxMatch[i][j] = min(maxMatch[i+1][j+1]+1, min(int(s.size())-j+1, j-i));
-            }
-        }
-    }
-}
-
-bool can[5005][5005];
-
-void makeCan(string &s) {
-    int n = s.size();
-    for (int j = 1; j <= n; j ++) {
-        for (int i = 1; i < j; i ++) {
-            if (n-j+1 >= j-i && i+maxMatch[i][j] < j && j+maxMatch[i][j] <= n) {
-                can[i][j] = s[i+maxMatch[i][j]-1] < s[j+maxMatch[i][j]-1];
-            }
-        }
-    }
-}
-
-int zero[5005];
-
-void makeZero(string &s) {
-    for (int i = s.size(), cnt = 0; i > 0; i --) {
-        if (s[i-1] == '0') {
-            cnt ++;
-        } else {
-            cnt = 0;
-        }
-        zero[i] = cnt;
-    }
-}
-
+int lcp[5005][5005];
 int dp[5005][5005];
-int sum[5005];
-int mod = 1e9+7;
+string s;
+int n, mod = 1e9+7;
 
-int makeDp(string &s) {
-    makeMaxMatch(s);
-    makeCan(s);
-    makeZero(s);
-    int n = s.size();
-    for (int i = 1; i <= n; i ++) {
-        dp[0][i] = 1;
-        sum[i] = (sum[i-1] + dp[0][i])%mod;
+void makeLcp() {
+    for (int i = n-1; i >= 0; i --) {
+        for (int j = n-1; j > i; j --) {
+            if (s[i] == s[j]) {
+                lcp[i][j] = lcp[i+1][j+1] + 1;
+            }
+        }
+    }
+}
+
+bool comp(int i, int j, int x, int y) {
+    if (j-i != y-x) {
+        return j-i < y-x;
+    }
+    if (lcp[i][x] >= j-i+1) {
+        return false;
+    }
+    return s[i+lcp[i][x]] < s[x+lcp[i][x]];
+}
+
+int main () {
+    cin >> n >> s;
+    makeLcp();
+    for (int j = 0; j < n; j ++) {
+        dp[0][j] = 1;
     }
     for (int i = 1; i < n; i ++) {
         if (s[i] == '0') {
             continue;
         }
-        for (int j = 1; j <= n; j ++) {
-            sum[j] = sum[j-1] + dp[i-1][j];
-        }
-        for (int j = 1; j <= n-i; j ++) {
-            int st = max(1, i-j+1);
-            st = st + zero[i];
-            if (i < j || (can[st][i+1] && st < i)) {
-                dp[i][j] = (sum[i-1] - sum[st-1] + mod) % mod;
+        for (int j = i, p = i-1, sum = 0; j < n; j ++) {
+            while (p >= 0 && comp(p, i-1, i, j)) {
+                sum += dp[p][i-1];
+                if (sum >= mod) {
+                    sum -= mod;
+                }
+                p --;
             }
+            dp[i][j] = sum;
         }
     }
-
     int ans = 0;
-
     for (int i = 0; i < n; i ++) {
-        ans = (ans + dp[i][n-i]) % mod;
+        ans += dp[i][n-1];
+        if (ans >= mod) {
+            ans -= mod;
+        }
     }
-    return ans;
-}
-
-int main () {
-    int n;
-    string str;
-    cin >> n >> str;
-    cout << makeDp(str);
+    cout << ans << endl;
     return 0;
 }
