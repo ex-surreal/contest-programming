@@ -6,83 +6,58 @@ using namespace std;
 #define mp make_pair
 #define sz(x) int((x).size())
 
-int deg[505];
+int deg[505], n;
+int adj[505][505];
+string ans;
+
+void dfs(int u, char c) {
+    ans[u] = c;
+    for (int i = 0; i < n; i ++) {
+        if (adj[u][i] && ans[i] == '#') {
+            dfs(i, c);
+        }
+    }
+}
 
 int main () {
 	std::ios_base::sync_with_stdio(false);
-    int n, m;
+    int m;
     cin >> n >> m;
-    if (m == 0) {
-        if (n > 2) {
-            cout << "No\n";
-            return 0;
-        }
-        cout << "Yes\n";
-        if (n == 1) {
-            cout << "a";
-        } else {
-            cout << "ac";
-        }
-    }
     for (int i = 0; i < m; i ++) {
         int x, y;
         cin >> x >> y;
+        adj[x-1][y-1] = 1;
+        adj[y-1][x-1] = 1;
         deg[x-1] ++;
         deg[y-1] ++;
     }
-    int nb = count(deg, deg+n, n-1), db = n-1;
-    set <int> st;
+    ans = string(n, '#');
     for (int i = 0; i < n; i ++) {
-        if (deg[i] == db) {
+        if (deg[i] == n-1) {
+            ans[i] = 'b';
             continue;
         }
-        st.insert(deg[i]);
     }
-    if (st.size() > 2u) {
-        cout << "No\n";
-        return 0;
+    string d = "ac";
+    for (int i = 0; i < n && d != ""; i ++) {
+        if (ans[i] == '#') {
+            dfs(i, d[0]);
+            d = d.substr(1);
+        }
     }
-    int dc = -1, nc = 0;;
-    if (st.begin() != st.end()) {
-        dc = *st.begin();
-        st.erase(st.begin());
-        if (count(deg, deg+n, dc) <= nb-1) {
+    for (int i = 0; i < n; i ++) {
+        if (ans[i] == '#') {
             cout << "No\n";
             return 0;
         }
-        nc = dc-nb+1;
-        if (nc != count(deg, deg+n, dc)) {
-            cout << "No\n";
-            return 0;
+        for (int j = 0; j < i; j ++) {
+            if (int(abs(ans[i]-ans[j]) <= 1) ^ adj[i][j]) {
+                cout << "No\n";
+                return 0;
+            }
         }
-    }
-    int na = 0, da = -1;
-    if (st.begin() != st.end()) {
-        da = *st.begin();
-        if (count(deg, deg+n, da) <= nb-1) {
-            cout << "No\n";
-            return 0;
-        }
-        na = da - nb+1;
-        if (count(deg, deg+n, da) != na) {
-            cout << "No\n";
-            return 0;
-        }
-    }
-    if (na+nb+nc != n) {
-        cout << "No\n";
-        return 0;
     }
     cout << "Yes\n";
-    for (int i = 0; i < n; i ++) {
-        if (deg[i] == da) {
-            cout << 'a';
-        } else if (deg[i] == db) {
-            cout << 'b';
-        } else {
-            cout << 'c';
-        }
-    }
-    cout << "\n";
+    cout << ans <<"\n";
 	return 0;
 }
