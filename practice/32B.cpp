@@ -15,22 +15,18 @@ using namespace std;
 
 int main () {
     std::ios_base::sync_with_stdio(false);
-    string B[105];
-    int n, m;
-    cin >> m >> n;
-    rep(i, m) {
-        cin >> B[i];
-    }
-    int cum[105][105] = {0}, ans = 0;
-    for (int i = m; i > 0; i --) {
-        for (int j = n; j > 0; j --) {
-            int t = (B[i-1][j-1] == 'W' ? 1 : -1);
-            if (t != cum[i+1][j]+cum[i][j+1]-cum[i+1][j+1]) {
-                ans ++;
-            }
-            cum[i][j] = t;
+    string p;
+    cin >> p;
+    rep(i, sz(p)) {
+        if (p[i] == '.') {
+            cout << 0;
+        } else if (p[i+1] == '.') {
+            i ++;
+            cout << 1;
+        } else {
+            i ++;
+            cout << 2;
         }
     }
-    cout << ans;
     return 0;
 }

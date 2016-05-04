@@ -9,9 +9,10 @@ using namespace std;
 #define repi(i, a, n) for (int i = int(a); i < int(n); i++)
 #define repe(i, a) for (__typeof((a).begin()) i = (a).begin(); i != (a).end(); i++)
 
+struct RT {
+    std::pair<int,int> v[40000]; // runtime linked with size of this array, 6s at 10000, 20s at 20000, who knows at 200000 (quadratic time? who knows)
+} z;
+
 int main () {
-	std::ios_base::sync_with_stdio(false);
-	unsigned long i = 18446744073709551615ul;
-	cout << i << " " << sizeof(long long);
 	return 0;
 }

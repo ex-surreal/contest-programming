@@ -15,22 +15,28 @@ using namespace std;
 
 int main () {
     std::ios_base::sync_with_stdio(false);
-    string B[105];
-    int n, m;
-    cin >> m >> n;
-    rep(i, m) {
-        cin >> B[i];
+    int dp[2][27] = {0};
+    int can[27][27] = {0};
+    string p;
+    cin >> p;
+    int k;
+    cin >> k;
+    rep(i, k) {
+        string q;
+        cin >> q;
+        can[q[0]-'a'][q[1]-'a'] = 1;
+        can[q[1]-'a'][q[0]-'a'] = 1;
     }
-    int cum[105][105] = {0}, ans = 0;
-    for (int i = m; i > 0; i --) {
-        for (int j = n; j > 0; j --) {
-            int t = (B[i-1][j-1] == 'W' ? 1 : -1);
-            if (t != cum[i+1][j]+cum[i][j+1]-cum[i+1][j+1]) {
-                ans ++;
+    int now = 0, pre = 1;
+    rep(i, sz(p)) {
+        swap(now, pre);
+        rep(j, 27) {
+            dp[now][j] = dp[pre][j] + 1;
+            if (!can[p[i]-'a'][j]) {
+                dp[now][j] = min(dp[now][j], dp[pre][p[i]-'a']);
             }
-            cum[i][j] = t;
         }
     }
-    cout << ans;
+    cout << dp[now][26];
     return 0;
 }

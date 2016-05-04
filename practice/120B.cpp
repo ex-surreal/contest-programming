@@ -15,22 +15,18 @@ using namespace std;
 
 int main () {
     std::ios_base::sync_with_stdio(false);
-    string B[105];
-    int n, m;
-    cin >> m >> n;
-    rep(i, m) {
-        cin >> B[i];
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    int n, k;
+    cin >> n >> k;
+    k --;
+    vector <int> a(n);
+    repe(&x, a) {
+        cin >> x;
     }
-    int cum[105][105] = {0}, ans = 0;
-    for (int i = m; i > 0; i --) {
-        for (int j = n; j > 0; j --) {
-            int t = (B[i-1][j-1] == 'W' ? 1 : -1);
-            if (t != cum[i+1][j]+cum[i][j+1]-cum[i+1][j+1]) {
-                ans ++;
-            }
-            cum[i][j] = t;
-        }
+    while (a[k] == 0) {
+        k = (k+1)%n;
     }
-    cout << ans;
+    cout << k+1;
     return 0;
 }
