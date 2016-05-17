@@ -59,8 +59,3 @@ namespace suffix_automaton_map {
 }
 
 using namespace suffix_automaton_map;
-
-int main () {
-    make("none");
-    return 0;
-}
