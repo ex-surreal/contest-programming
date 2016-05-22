@@ -13,23 +13,22 @@ using namespace std;
 #define repi(i, a, n) for (int i = (a); i < int(n); i ++)
 #define repe(x, v) for (auto x: (v))
 
-
 #include <string>
 #include <vector>
 
 namespace suffix_automaton_array {
     std::vector <int> len, link, cnt;
     std::vector <std::vector <int> > child;
-    const int alpha = 26, start_char = 'A';
+    const int alpha = 26, start_char = 'a';
     
     /**
      * @return last
      * */
     int init() {
         len.clear();
+        cnt.clear();
         link.clear();
         child.clear();
-        cnt.clear();
         len.push_back(0);
         cnt.push_back(0);
         link.push_back(-1);
@@ -70,12 +69,11 @@ namespace suffix_automaton_array {
         last = cur;
     }
 
-    int make(std::string s) {
+    void make(std::string s) {
         int last = init();
         for (int i = 0; i < int(s.size()); i ++) {
             add(s[i]-start_char, last);
         }
-        return last;
     }
 }
 
@@ -84,42 +82,56 @@ using namespace suffix_automaton_array;
 int main () {
     std::ios_base::sync_with_stdio(false);
     string p;
-    cin >> p;
-    int last = make(p);
-    vector <bool> ter(sz(len), false);
-    for (int u = last; u != 0; u = link[u]) {
-        ter[u] = true;
-    }
-    vector <int> C(sz(p)+1, 0);
-    rep(i, sz(len)) {
-        C[len[i]] ++;
+    int n;
+    cin >> p >> n;
+    make(p);
+    vector <int> C(sz(p)+1), ord(sz(len));
+    repe(l, len) {
+        C[l] ++;
     }
     for (int i = sz(C)-2; i >= 0; i --) {
         C[i] += C[i+1];
     }
-    vector <int> ord(sz(len));
     for (int i = sz(len)-1; i >= 0; i --) {
         ord[--C[len[i]]] = i;
     }
-    vector <int> dp = cnt;
-    rep(i, sz(ord)) {
-        if (link[ord[i]] == -1) {
-            continue;
-        }
-        dp[link[ord[i]]] += dp[ord[i]];
-    }
-    int u = 0;
-    vector <int> pos, num;
-    rep(i, sz(p)) {
-        u = child[u][p[i]-'A'];
-        if (ter[u]) {
-            pos.pb(i+1);
-            num.pb(dp[u]);
+    repe(o, ord) {
+        if (link[o] != -1) {
+            cnt[link[o]] += cnt[o];
         }
     }
-    cout << sz(pos) << "\n";
-    rep(i, sz(pos)) {
-        cout << pos[i] << " " << num[i] << "\n";
+    rep(r, n) {
+        string s;
+        cin >> s;
+        int u = 0, i = 0, j = 0, ans = 0;
+        string t = s+s;
+        map <int, bool> seen;
+        while (j < sz(t)) {
+            if (child[u][t[j]-start_char] != -1) {
+                u = child[u][t[j]-start_char];
+                j ++;
+            } else {
+                i ++;
+                if (u == 0) {
+                    j = i;
+                    continue;
+                }
+                if (j-i <= len[link[u]]) {
+                    u = link[u];
+                }
+            }
+            if (j-i == sz(s)) {
+                if (seen.count(u) == 0) {
+                    ans += cnt[u];
+                }
+                seen[u] = true;
+                i ++;
+                if (j-i <= len[link[u]]) {
+                    u = link[u];
+                }
+            }
+        }
+        cout << ans << "\n";
     }
     return 0;
 }
