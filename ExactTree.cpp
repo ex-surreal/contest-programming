@@ -1,4 +1,16 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <map>
+#include <cmath>
+#include <set>
+#include <queue>
+#include <stack>
+#include <cstring>
+
 using namespace std;
 #define pb push_back
 #define mp make_pair
@@ -12,8 +24,24 @@ using namespace std;
 class ExactTree {
 public:
 	int getTree(int n, int m, int r) {
-		int ret;
-		return ret;
+        vector <vector <int> > f(n+1, vector <int>(m));
+        vector <vector <int> > g(n+1, vector <int>(m));
+        repi(r, 1, m) {
+            f[0][r] = g[0][r] = 1<<29;
+        }
+        repi(t, 1, n+1) {
+            rep(r, m) {
+                int x = t*(n-t);
+                f[t][r] = x+g[t-1][(r-x%m+m)%m];
+                g[t][r] = 1<<29;
+                repi(j, 1, t+1) {
+                    rep(r1, m) {
+                        g[t][r] = min(g[t][r], f[j][r1] + g[t-j][(r-r1+m)%m]);
+                    }
+                }
+            }
+        }
+		return f[n][r] == (1<<29) ? -1 : f[n][r];
 	}
 };
 
