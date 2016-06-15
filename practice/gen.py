@@ -1,7 +1,21 @@
 import random
 
-for i in range(2500):
-    s = []
-    for j in range(2500):
-        s.append(str(random.randint(0, 1)))
-    print ''.join(s)
+def fun(m):
+    i = 2
+    while i < m:
+        res = i
+        for j in range(20):
+            res = res*res%m
+        if res == 1:
+            return i, j
+        i += 1
+    return -1
+
+while True:
+    try:
+        k = raw_input()
+    except:
+        pass
+    print fun(int(k))
+    print "OK"
+
