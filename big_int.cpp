@@ -146,7 +146,6 @@ class big_int {
             c = c + a.substr(i, 1);
             while (!(c < b)) {
                 c = c - b;
-
             }
         }
         return c.normalize(sign);
