@@ -9,7 +9,7 @@ int mod = 1e9+7;
 
 /**
  * @param int n
- * @return aa nxn identity matrix
+ * @return a nxn identity matrix
  * */
 matrix get_identity(int n) {
     matrix I(n);
@@ -45,9 +45,9 @@ matrix cross(matrix &a, matrix &b) {
 }
 
 /**
- * @param matrix &a
+ * @param matrix a
  * @param integral ex
- * @param matrix &p = pow(a, ex)
+ * @return matrix pow(a, ex)
  * Assumes a is a nxn matrx
  * */
 template <class integral> matrix pwr(matrix a, integral ex) {
