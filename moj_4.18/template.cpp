@@ -1,4 +1,17 @@
-#include <bits/stdc++.h>
+#include <bitset>
+#include <vector>
+#include <numeric>
+#include <string>
+#include <algorithm>
+#include <map>
+#include <cmath>
+#include <set>
+#include <queue>
+#include <stack>
+#include <cstring>
+#include <ctime>
+#include <cstdlib>
+#include <cassert>
 
 using namespace std;
 
@@ -16,7 +29,7 @@ using namespace std;
 class $CLASSNAME$ {
 public:
     $RC$ $METHODNAME$($METHODPARMS$) {
-        $RC$ ret;
+        $RC$ ret(0);
         return ret;
     }
 };
