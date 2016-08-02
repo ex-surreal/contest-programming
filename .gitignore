@@ -4,7 +4,6 @@
 *.o
 *.pyc
 *.class
-*.txt
 **/.DS_Store
 *.in
 *.out
