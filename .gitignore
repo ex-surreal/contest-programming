@@ -3,3 +3,5 @@
 *.class
 *.txt
 **/.DS_Store
+*.in
+*.out
