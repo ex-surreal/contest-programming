@@ -1,73 +1,64 @@
-#include <bits/stdc++.h>
-#define mp make_pair
-#define pb push_back
-#define sz(a) int((a).size())
-#define x first
-#define y second
-#define rep(i, n) for (int i = 0; i < int(n); i++)
-#define repi(i, a, n) for (int i = int(a); i < int(n); i++)
-#define repe(i, v) for (__typeof((v).begin()) i; i != (v).end(); i++)
+#include <iostream>
+#include <bitset>
+#include <vector>
+#include <numeric>
+#include <string>
+#include <algorithm>
+#include <map>
+#include <cmath>
+#include <set>
+#include <queue>
+#include <stack>
+#include <cstring>
+#include <ctime>
+#include <cstdlib>
+#include <cassert>
 
 using namespace std;
 
+#define mem(a, v) memset(a, v, sizeof (a))
+#define x first
+#define y second
+#define all(a) (a).begin(), (a).end()
+#define mp make_pair
+#define pb push_back
+#define sz(x) int((x).size())
+#define rep(i, n) for (int i = 0; i < int(n); i ++)
+#define repi(i, a, n) for (int i = (a); i < int(n); i ++)
+#define repe(x, v) for (auto x: (v))
+
 class MissingLCM {
-	vector <int> prime;
-	vector <int> cnt;
-	vector <int> getPrimes(int n) {
-		vector <bool> isPrime(n+1, true);
-		for (int i = 2; 1ll*i*i <= n; i++) {
-			if (isPrime[i]) {
-				for (int j = i*i; j <= n; j += i) {
-					isPrime[j] = false;
-				}
-			}
-		}
-		repi (i, 2, n+1) {
-			if (isPrime[i]) {
-				prime.pb(i);
-			}
-		}
-		cnt = vector <int> (prime.size(), 0);
-		rep (i, sz(prime)) {
-			int t = n;
-			while (t >= prime[i]) {
-				t /= prime[i];
-				cnt[i] ++;
-			}
-		}
-		return prime;
-	}
-
-	bool isPossible(int y) {
-		rep (i, sz(prime)) {
-			int t = y;
-			rep (j, cnt[i]) {
-				t /= prime[i];
-			}
-			if (t < 2) {
-				return false;
-			}
-		}
-		return true;
-	}
-
 public:
-	int getMin(int N) {
-		getPrimes(N);
-		// rep (i, sz(prime)) {
-		// 	cerr << prime[i] << " " << cnt[i] << endl;
-		// }
-		int low = N+1, high = 2*N;
-		while (low <= high) {
-			int mid = (low+high) / 2;
-			if (isPossible(mid)) {
-				high = mid -1;
-			} else {
-				low = mid + 1;
-			}
-		}
-		return low;
-	}
+    int getMin(int N) {
+        int ret(2);
+        vector <bool> is_prime(N+1, true);
+        is_prime[0] = is_prime[1] = false;
+        repi(i, 2, N+1) {
+            if (is_prime[i]) {
+                int p = 0, t = N, c = 1;
+                while (t >= i) {
+                    p ++;
+                    t /= i;
+                    c *= i;
+                }
+                int high = sqrt(N)+1, low = 2;
+                while (low <= high) {
+                    int mid((high+low)/2);
+                    /* cout << high << " " << low << " " << mid << " " << c << " " << N << endl; */
+                    if (1ll*mid*c <= N) {
+                        low = mid + 1;
+                    } else {
+                        high = mid - 1;
+                    }
+                }
+                ret = max(ret, low*c);
+                for (int j = i*2; j <= N; j += i) {
+                    is_prime[j] = false;
+                }
+            }
+        }
+        return ret;
+    }
 };
 
 // BEGIN CUT HERE
