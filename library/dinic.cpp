@@ -15,7 +15,7 @@ void init(int n) {
     flow.clear();
 }
 
-inline void add(int u, int v, int c = 1) {
+void add(int u, int v, int c = 1) {
     to.push_back(v);
     pre.push_back(L[u]);
     cap.push_back(c);
@@ -23,7 +23,7 @@ inline void add(int u, int v, int c = 1) {
     L[u] = to.size()-1;
 }
 
-inline void add_edge(int u, int v, int c = 1) {
+void add_edge(int u, int v, int c = 1) {
     add(u, v, c);
     add(v, u, 0);
 }

@@ -44,7 +44,7 @@ bool augment(int s, int t, fc & ans) {
     bk ++;
     inq[s] = true;
 
-    while (fr %n != bk % n) {
+    while (fr < bk) {
         int u = Q[fr % n];
         fr ++;
         inq[u] = false;
