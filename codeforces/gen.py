@@ -1,21 +1,12 @@
-import random
+from random import randint, seed
+from time import time
 
-def fun(m):
-    i = 2
-    while i < m:
-        res = i
-        for j in range(20):
-            res = res*res%m
-        if res == 1:
-            return i, j
-        i += 1
-    return -1
+seed(time())
 
-while True:
-    try:
-        k = raw_input()
-    except:
-        pass
-    print fun(int(k))
-    print "OK"
+n = 1000
+k = 963761198400L
 
+print n, k
+
+for i in range(n):
+    print randint(1, 1000000)*randint(1, 1000000),
