@@ -1,0 +1,12 @@
+Problem A 	UVA 11255 	Necklace
+Problem B 	UVA 10529 	Dumb Bones
+Problem C 	UVA 11290 	Gangs
+Problem D 	UVA 1564 	  Widget Factory
+Problem E 	UVA 11102 	Moonshine
+Problem F 	UVA 1378 	  A Funny Stone Game
+Problem G 	UVA 11249 	Game
+Problem H 	UVA 1549 	  Lattice Point
+Problem I 	UVA 1341 	  Different Digits
+Problem J 	UVA 11317 	GCD+LCM
+Problem K 	UVA 11024 	Circular Lock
+Problem L 	UVA 12034 	Race
