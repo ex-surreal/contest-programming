@@ -7,7 +7,8 @@ type cost[N][N];
 type lx[N], ly[N];
 int xy[N], yx[N];
 bool S[N], T[N];
-int slack[N], slackx[N];
+type slack[N];
+int slackx[N];
 int Q[N], pre[N];
 int n;
 

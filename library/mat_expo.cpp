@@ -12,13 +12,13 @@ int mod = 1e9+7;
  * @return a nxn identity matrix
  * */
 matrix get_identity(int n) {
-    matrix I(n);
-    for (int i = 0; i < n; i ++) {
-        I[i].resize(n);
-        fill(I[i].begin(), I[i].end(), 0);
-        I[i][i] = 1;
-    }
-    return I;
+  matrix I(n);
+  for (int i = 0; i < n; i ++) {
+    I[i].resize(n);
+    fill(I[i].begin(), I[i].end(), 0);
+    I[i][i] = 1;
+  }
+  return I;
 }
 
 /**
@@ -28,20 +28,20 @@ matrix get_identity(int n) {
  * Assumes the multiplication is valid i.e. a[0].size() == b.size() 
  * */
 matrix cross(matrix &a, matrix &b) {
-    int m = a.size(), n = b.back().size(), t = b.size();
-    matrix c(m);
-    for (int i = 0; i < m; i ++) {
-        c[i].resize(n);
+  int m = a.size(), n = b.back().size(), t = b.size();
+  matrix c(m);
+  for (int i = 0; i < m; i ++) {
+    c[i].resize(n);
+  }
+  for (int i = 0; i < m; i ++) {
+    for (int j = 0; j < n; j ++) {
+      c[i][j] = 0;
+      for (int k = 0; k < t; k ++) {
+        c[i][j] = (c[i][j] + 1ll*a[i][k]*b[k][j]) % mod;
+      }
     }
-    for (int i = 0; i < m; i ++) {
-        for (int j = 0; j < n; j ++) {
-            c[i][j] = 0;
-            for (int k = 0; k < t; k ++) {
-                c[i][j] = (c[i][j] + 1ll*a[i][k]*b[k][j]) % mod;
-            }
-        }
-    }
-    return c;
+  }
+  return c;
 }
 
 /**
@@ -51,14 +51,14 @@ matrix cross(matrix &a, matrix &b) {
  * Assumes a is a nxn matrx
  * */
 template <class integral> matrix pwr(matrix a, integral ex) {
-    int n = a.size();
-    matrix r = get_identity(n);
-    while (ex > 0) {
-        if (ex&1) {
-            r = cross(r, a);
-        }
-        a = cross(a, a);
-        ex >>= 1;
+  int n = a.size();
+  matrix r = get_identity(n);
+  while (ex > 0) {
+    if (ex&1) {
+      r = cross(r, a);
     }
-    return r;
+    a = cross(a, a);
+    ex >>= 1;
+  }
+  return r;
 }
