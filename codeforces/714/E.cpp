@@ -32,30 +32,21 @@ int main () {
   std::ios_base::sync_with_stdio(false);
   int n;
   cin >> n;
-  vector <int> a(n);
-  repe(&e, a) {
-    cin >> e;
-  }
-  long long ans = 1ll<<60;
+  vector <int> a(n), b(n);
   rep(i, n) {
-    long long t = 0;
-    for (int j = n-1, lst = 1<<30; j >= 0; j --) {
-      int need = a[i]+j-i;
-      if (a[j] >= lst) {
-        t += a[j]-lst+1;
-        lst = lst-1;
-      } else {
-        if (need > a[j]) {
-          lst = need;
-          t += need-a[j];
-        } else {
-          lst = a[j];
-        }
-      }
-      cout << need << " " << lst << " " << t << endl;
-    }
-    ans = min(t, ans);
+    cin >> a[i];
+    a[i] = b[i] = a[i]-i;
   }
-  cout << ans;
+  sort(all(b));
+  vector <vector <long long> > dp(2, vector <long long> (n));
+  int now = 0, pre = 1;
+  rep(i, n) {
+    swap(now, pre);
+    dp[now][0] = dp[pre][0] + abs(a[i]-b[0]);
+    repi(j, 1, n) {
+      dp[now][j] = min(dp[pre][j] + abs(a[i]-b[j]), dp[now][j-1]);
+    }
+  }
+  cout << dp[now][n-1];
   return 0;
 }
