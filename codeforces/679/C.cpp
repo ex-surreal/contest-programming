@@ -57,12 +57,6 @@ int main () {
   repe(&e, B) {
     cin >> e;
   }
-  vector <vector <int> > C(n+1, vector <int> (n+1));
-  rep(i, n) {
-    rep(j, n) {
-      C[i+1][j+1] = (B[i][j] == '.') + C[i][j+1]+C[i+1][j]-C[i][j];
-    }
-  }
   seen.resize(n, vector<int>(n, -1));
   rep(i, n) {
     rep(j, n) {
@@ -73,39 +67,46 @@ int main () {
     }
   }
   int ans = 0;
-  repi(i, k-1, n) {
-    rep(l, n-k+1) {
-      int t = 0;
-      vector <int> d(sz(cnt));
-      rep(j, k) {
-        if (in(i+1, j+l) && seen[i+1][j+l] != -1) {
-          d[seen[i+1][j+l]] ++;
-          if (d[seen[i+1][j+l]] == 1) {
-            t += cnt[seen[i+1][j+l]];
-          }
+  rep(i, n-k+1) {
+    vector <int> d(sz(cnt));
+    int sum = 0;
+    rep(j, k) {
+      rep(l, k) {
+        if (seen[i+l][j] == -1) {
+          sum ++;
+          continue;
         }
-        if (in(i-k, j+l) && seen[i-k][j+l] != -1) {
-          d[seen[i-k][j+l]] ++;
-          if (d[seen[i-k][j+l]] == 1) {
-            t += cnt[seen[i-k][j+l]];
-          }
+        if (d[seen[i+l][j]] == 0) {
+          sum += cnt[seen[i+l][j]];
         }
-        if (in(i-j, l-1) && seen[i-j][l-1] != -1) {
-          d[seen[i-j][l-1]] ++;
-          if (d[seen[i-j][l-1]] == 1) {
-            t += cnt[seen[i-j][l-1]];
-          }
+        d[seen[i+l][j]] ++;
+      }
+    }
+    cout << i << " " << 0 << " " << sum << endl;
+    ans = max(ans, sum);
+    repi(j, 1, n-k+1) {
+      rep(l, k) {
+        if (seen[i+l][j+k-1] == -1) {
+          sum ++;
+          continue;
         }
-        if (in(i-j, l+k) && seen[i-j][l+k] != -1) {
-          d[seen[i-j][l+k]] ++;
-          if (d[seen[i-j][l+k]] == 1) {
-            t += cnt[seen[i-j][l+k]];
-          }
+        if (seen[i+l][j-1] == -1) {
+          sum --;
+          continue;
+        }
+        if (d[seen[i+l][j+k-1]] == 0) {
+          sum += cnt[seen[i+l][j+k-1]];
+        }
+        d[seen[i+l][j+k-1]] ++;
+        d[seen[i+l][j-1]] --;
+        if (d[seen[i+l][j-1]] == 0) {
+          sum -= cnt[seen[i+l][j-1]];
         }
       }
-      ans = max(ans, t+k*k-sum(i-k+1, l, i, l+k-1));
+      cout << i << " " << j << " " << sum << endl;
+      ans = max(ans, sum);
     }
   }
-  cout << ans << endl;
+  cout << ans;
   return 0;
 }
