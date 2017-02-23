@@ -35,5 +35,27 @@ typedef long long ll;
 
 int main () {
   std::ios_base::sync_with_stdio(false);
+  int n, x, y;
+  cin >> n >> x >> y;
+  vt(int) pre;
+  for (ll i = 1, j = 1; i <= x || j <= y;) {
+    if (i*y < j*x) {
+      pre.push_back(0);
+      i ++;
+    } else if (i*y > j*x) {
+      pre.push_back(1);
+      j ++;
+    } else {
+      pre.push_back(2);
+      pre.push_back(2);
+      i ++, j ++;
+    }
+  }
+  string ans[] = {"Vanya", "Vova", "Both"};
+  rep(i, n) {
+    int a;
+    cin >> a;
+    cout << ans[pre[(a-1) % (x+y)]] << "\n";
+  }
   return 0;
 }

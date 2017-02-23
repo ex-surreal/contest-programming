@@ -35,5 +35,12 @@ typedef long long ll;
 
 int main () {
   std::ios_base::sync_with_stdio(false);
+  int n;
+  cin >> n;
+  int ans = 1;
+  rep(i, n-1) {
+    ans = ans*3 % 1000003;
+  }
+  cout << ans;
   return 0;
 }

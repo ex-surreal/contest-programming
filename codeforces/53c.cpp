@@ -35,5 +35,19 @@ typedef long long ll;
 
 int main () {
   std::ios_base::sync_with_stdio(false);
+  int n;
+  cin >> n;
+  int l = 1, r = n;
+  cout << l;
+  rep(i, n-1) {
+    cout << " ";
+    if (i&1) {
+      cout << l;
+      r --;
+    } else {
+      cout << r;
+      l ++;
+    }
+  }
   return 0;
 }

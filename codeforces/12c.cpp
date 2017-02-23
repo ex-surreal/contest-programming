@@ -35,5 +35,28 @@ typedef long long ll;
 
 int main () {
   std::ios_base::sync_with_stdio(false);
+  int n, m;
+  cin >> n >> m;
+  vt(int) p(n), c;
+  repe(&e, p) {
+    cin >> e;
+  }
+  map <string, int> cnt;
+  rep(i, m) {
+    string p;
+    cin >> p;
+    cnt[p] ++;
+  }
+  repe(e, cnt) {
+    c.push_back(e.y);
+  }
+  sort(all(p));
+  sort(all(c));
+  int l = 0, r = 0;
+  rep(i, sz(c)) {
+    r += c[sz(c)-i-1]*p[sz(p)-1-i];
+    l += c[sz(c)-i-1]*p[i];
+  }
+  cout << l << " " << r;
   return 0;
 }

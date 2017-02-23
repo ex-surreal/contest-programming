@@ -35,5 +35,18 @@ typedef long long ll;
 
 int main () {
   std::ios_base::sync_with_stdio(false);
+  int vp, vd, t, f, c;
+  cin >> vp >> vd >> t >> f >> c;
+  if (vp > vd) {
+    cout << 0;
+    return 0;
+  }
+  double fn = 1.0*t*vp*vd/(vd-vp);
+  int ans = 0;
+  while (fn < 1.0*c) {
+    fn = 1.0*(fn*(vd+vp) + f*vd*vp)/(vd-vp);
+    ans ++;
+  }
+  cout << ans << endl;
   return 0;
 }

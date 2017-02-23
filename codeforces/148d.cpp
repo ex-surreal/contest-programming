@@ -33,7 +33,32 @@ using namespace std;
 
 typedef long long ll;
 
+double f[1005][1005];
+double g[1005][1005];
+
 int main () {
   std::ios_base::sync_with_stdio(false);
+  rep(i, 1005) {
+    g[0][i] = 1;
+  }
+  repi(i, 1, 1005) {
+    f[i][0] = 1;
+    g[i][0] = 1;
+  }
+  int w, b;
+  cin >> w >> b;
+  repi(i, 1, w+1) {
+    repi(j, 1, b+1) {
+      f[i][j] = 1.0*i/(i+j) + j*(1-g[i][j-1])/(i+j);
+      g[i][j] = 1.0*i/(i+j) + j*((
+         (1-f[i-1][j-1])*i +
+         (1-(j == 1 ? 0. : f[i][j-2]))*(j-1)
+        ) / (i+j-1)
+      ) / (i+j);
+    }
+  }
+  cout.precision(10);
+  cout.setf(ios::fixed);
+  cout << f[w][b];
   return 0;
 }
